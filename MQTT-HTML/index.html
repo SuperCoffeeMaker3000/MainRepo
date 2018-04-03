@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Coffee Maker 3000</title>
+</head>
+<body>
+	<div>
+		<button type="button" id="makeCoffee">Make Coffee</button>
+		<button type="button" id="makeChocolateMilk">Make Chocolate Milk</button>
+		<button type="button" id="makeTea">Make Tea</button>
+	</div>
+	<!--<div class="add-message">
+        <input type="text" id="tbAddMessage" placeholder="Message here"/>
+        <button type="button" id="btnAddMessage">Publish</button>
+    </div>-->
+    <ul id="messages">
+
+    </ul>
+	<script src="https://mqtt.fhict.nl/cdn/paho.javascript-1.0.1/mqttws31-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
+    <script>
+        // Documentation found at http://www.eclipse.org/paho/clients/js/
+        // or http://www.eclipse.org/paho/files/jsdoc/index.html
+
+        // Create a client (host,port,unique client id)
+        client = new Paho.MQTT.Client("mqtt.fhict.nl", 8884, (Math.random() * 1e32).toString(36));
+        // set callback handlers
+        client.onConnectionLost = onConnectionLost;
+        client.onMessageArrived = onMessageArrived;
+
+        // connect the client
+        client.connect({
+            onSuccess: onConnect,
+            onFailure: onFailure,
+            useSSL: true,
+            userName: "i339762_martijnbooij",
+            password: "Rtd1Ss44uHGLNq"
+        });
+
+
+        // called when the client connects
+        function onConnect() {
+            // Once a connection has been made, make a subscription and send a message.
+            console.log("onConnect");
+
+            //Subscribe to the topic we want to listen to (same as the one we are sending data too.)
+            client.subscribe("public/i339762_martijnbooij/");
+        }
+
+        function onFailure(responseObject){
+          console.log("onFailure: ",responseObject);
+        }
+
+        // called when the client loses its connection
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                console.log("onConnectionLost:" + responseObject.errorMessage);
+            }
+        }
+
+        // called when a message arrives
+        function onMessageArrived(message) {
+            console.log("onMessageArrived:" + message.payloadString);
+            console.log(message);
+            // You could filter all the messages here, we just accept everything (and do some html encoding).
+            $('#messages').append($('<li>').text(message.payloadString));
+        }
+
+        // OnReady
+        $(document).ready(function() {
+            // Add click handler
+            $('#makeCoffee').click(function() {
+                // Create new message with the text
+                message = new Paho.MQTT.Message("makeCoffee");
+                message.destinationName = "public/i339762_martijnbooij/";
+                // Send the message
+                client.send(message);
+            });
+
+            $('#makeChocolateMilk').click(function() {
+                // Create new message with the text
+                message = new Paho.MQTT.Message("makeChocolateMilk");
+                message.destinationName = "public/i339762_martijnbooij/";
+                // Send the message
+                client.send(message);
+            });
+
+            $('#makeTea').click(function() {
+                // Create new message with the text
+                message = new Paho.MQTT.Message("makeTea");
+                message.destinationName = "public/i339762_martijnbooij/";
+                // Send the message
+                client.send(message);
+            });
+
+            $('#tbAddMessage').keypress(function(e) {
+                var key = e.which;
+                if (key == 13) // the enter key code
+                {
+                    $('#btnAddMessage').click();
+                    return false;
+                }
+            }).focus();
+        });
+
+    </script>
+</body>
+</html>
