@@ -5,7 +5,7 @@ class iSensor
 {
 public:
 	~iSensor();
-	void GetData();
+	int GetData();
 };
 
 #endif

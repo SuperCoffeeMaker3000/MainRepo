@@ -8,10 +8,7 @@ class Sensor : public iSensor
 public:
 	Sensor();
 	~Sensor();
-	void GetData();
-
-private:
-	int sensorID;
+	int GetData();
 };
 
 #endif

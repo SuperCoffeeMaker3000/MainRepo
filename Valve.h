@@ -10,9 +10,6 @@ public:
 	~Valve();
 	void Open();
 	void Close();
-
-private:
-	int valveID;
 };
 
 #endif
