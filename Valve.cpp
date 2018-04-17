@@ -10,12 +10,8 @@ Valve::~Valve()
 	// nothing to delete here
 }
 
-void Open()
+void Open(uint8_t volume)
 {
 	// TO DO: open valve here
 }
 
-void Close()
-{
-	// TO DO: close valve here
-}

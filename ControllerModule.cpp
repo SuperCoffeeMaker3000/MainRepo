@@ -35,6 +35,7 @@ int ControllerModule::BroadCast()
 	return 0;
 }
 
+
 int ControllerModule::SendUpdatesToUI(int option, uint8_t target, uint8_t message, uint8_t module, uint8_t status, uint8_t error, uint8_t availableModules)
 {
 	switch (option)
@@ -45,6 +46,8 @@ int ControllerModule::SendUpdatesToUI(int option, uint8_t target, uint8_t messag
 		byteToSend[1] = message;
 		byteToSend[2] = module;
 		byteToSend[3] = status;
+
+		com.SendCommand(byteToSend);
 
 		// send here
 		break;

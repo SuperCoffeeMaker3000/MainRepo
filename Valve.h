@@ -8,8 +8,7 @@ class Valve : public iValve
 public:
 	Valve();
 	~Valve();
-	void Open();
-	void Close();
+	void Open(uint8_t volume);
 };
 
 #endif

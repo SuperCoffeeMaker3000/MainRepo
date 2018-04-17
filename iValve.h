@@ -6,8 +6,7 @@ class iValve
 public:
 	iValve();
 	~iValve();
-	void Open();
-	void Close();
+	void Open(uint8_t volume);
 };
 
 #endif
