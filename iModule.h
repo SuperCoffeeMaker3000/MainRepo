@@ -5,7 +5,7 @@ class iModule
 {
 public:
 	~iModule();
-	void Reply();
+	void SendMessage();
 	void GiveStatusUpdate();
 };
 

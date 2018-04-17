@@ -8,7 +8,7 @@ class WaterModule : public iWaterModule
 public:
 	WaterModule();
 	~WaterModule();
-	void Reply();
+	void SendMessage();
 };
 
 #endif

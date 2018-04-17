@@ -6,9 +6,9 @@
 class Module : public iModule
 {
 public:
-	Module();
+	Module(string ModuleID);
 	~Module();
-	void Reply();
+	void SendMessage();
 	void GiveStatusUpdate();
 
 private:
