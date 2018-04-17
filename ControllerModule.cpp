@@ -10,17 +10,17 @@ ControllerModule::~ControllerModule()
 	// nothing to delete here
 }
 
-void ControllerModule::Exit()
-{
-}
-
 int ControllerModule::GiveInstruction()
 {
+	// TO DO
+
 	return 0;
 }
 
 int ControllerModule::BroadCast()
 {
+	// TO DO
+
 	return 0;
 }
 

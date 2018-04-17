@@ -12,5 +12,7 @@ Sensor::~Sensor()
 
 int Sensor::GetData()
 {
+	// TO DO: read data from sensor
+
 	return 0;
 }

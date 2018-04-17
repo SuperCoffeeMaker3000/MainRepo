@@ -12,10 +12,10 @@ Valve::~Valve()
 
 void Open()
 {
-	// open valve here
+	// TO DO: open valve here
 }
 
 void Close()
 {
-	// close valve here
+	// TO DO: close valve here
 }

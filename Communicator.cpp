@@ -12,5 +12,6 @@ Communicator::~Communicator()
 
 int Communicator::SendCommand()
 {
+	// TO DO
 	return 0;
 }
