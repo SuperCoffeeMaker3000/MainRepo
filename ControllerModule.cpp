@@ -1,8 +1,19 @@
 #include "ControllerModule.h"
+#include "Communicator.h"
+
+
 
 ControllerModule::ControllerModule()
 {
-
+	SugarModule = 	new Communicator(AddressSugarModule);
+	CoffeePowder =	new Communicator(AddressCoffeePowder);
+	ChocoPowder = 	new Communicator(AddressChocoPowder);
+	WaterModule = 	new Communicator(AddressWaterModule);
+	
+	AddressSugarModule	= 0x7df;
+	AddressCoffeePowder	= 0x7de;
+	AddressChocoPowder	= 0x7dd;
+	AddressWaterModule	= 0x7dc;
 }
 
 ControllerModule::~ControllerModule()

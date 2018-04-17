@@ -12,6 +12,14 @@ public:
 
 private:
 	uint8_t byteToSend;
+	unsigned long AddressSugarModule;
+	unsigned long AddressCoffeePowder;
+	unsigned long AddressChocoPowder;
+	unsigned long AddressWaterModule;
+	Communicator SugarModule;
+	Communicator CoffeePowder;
+	Communicator ChocoPowder;
+	Communicator WaterModule;
 };
 
 #endif
