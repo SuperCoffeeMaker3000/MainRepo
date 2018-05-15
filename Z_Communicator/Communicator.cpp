@@ -58,3 +58,13 @@ void Communicator::SendCommand(uint8_t byteOne, uint8_t byteTwo)
 	
 	return;
 }
+bool Communicator::ReceiveMessage(int firstByte, int canId)
+{
+	int i = can.receiveCANMessage(&msg, 1000);
+	if(i && (msg.data[0] == firstByte) && msg.adrsValue == canId)
+	{
+		return true;
+	}
+	return false;
+}
+

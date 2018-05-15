@@ -17,6 +17,7 @@ public:
 	void SendCommand(uint8_t byteOne, uint8_t byteTwo, uint8_t byteThree, uint8_t byteFour);
 	void SendCommand(uint8_t byteOne, uint8_t byteTwo, uint8_t byteThree);
 	void SendCommand(uint8_t byteOne, uint8_t byteTwo);
+	bool ReceiveMessage(int firstByte, int canId);
 
 };
 
