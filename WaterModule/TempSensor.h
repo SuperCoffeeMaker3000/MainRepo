@@ -3,9 +3,13 @@
 
 #include "ISensor.h"
 
-class TempSensor : public ISensor
+class TempSensor : public Sensor
 {
-    
+    public:
+        double GetData();
+    private:
+        //analog
+        int SensorPin = 0;
 }
 
 
