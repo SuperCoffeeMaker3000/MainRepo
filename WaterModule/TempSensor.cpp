@@ -1,8 +1,5 @@
-#include "TempSensor.h"
- 
+#include "TempSensor.h" 
 #include "Arduino.h"
- 
-
  
 double Tempsensor::GetData()
  
