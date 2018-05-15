@@ -1,4 +1,3 @@
-#include <Communicator.h>
 
 #define SensorPin A0
 #include <math.h>
