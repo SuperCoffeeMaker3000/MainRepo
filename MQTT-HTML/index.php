@@ -4,20 +4,9 @@
 	<title>Coffee Machine</title>
     <link rel="stylesheet" type="text/css" href="index.css">
 </head>
-<body>
-	<div>
-		<button type="button" id="makeCoffee" class="button">Make Coffee</button>
-		<button type="button" id="makeChocolateMilk" class="button">Make Chocolate Milk</button>
-		<button type="button" id="makeTea" class="button">Make Tea</button>
-	</div>
-	<!--<div class="add-message">
-        <input type="text" id="tbAddMessage" placeholder="Message here"/>
-        <button type="button" id="btnAddMessage">Publish</button>
-    </div>-->
 
-    <?php
-        echo "hoi";
-        $servername = "timodebimo.nl";
+<?php
+        $servername = "localhost";
         $username = "timodebimo_admin";
         $password = "Koffie1";
         $dbname = "timodebimo_coffeemaker";
@@ -25,27 +14,39 @@
         //Create connection
         $conn = new mysqli($servername, $username, $password, $dbname);
         //Check connection
-        if($conn.connect_error){
-            die("Connection failed: " . $conn.connect_error);
-        }
-
-
-        $test = "INSERT INTO Drinks (Coffee, ChocolateMilk, Tea) VALUES (1,1,1)";
-
-        if($conn.query($sql) === TRUE)
-        {
-            echo "it worked";
-        }
-        else
-        {
-            echo "not working :(";
+        if($conn->connect_error){
+            die("Connection failed: " . $conn->connect_error);
         }
 
         $sql = "SELECT * FROM Drinks";
-        $result = $conn.query($test);
-        echo $result;
-        $conn.close();
+        $result = $conn->query($sql); 
+        $coffee = $result->fetch_assoc()["Coffee"];
+
+        $sql = "SELECT * FROM Drinks";
+        $result = $conn->query($sql); 
+        $choccymilk = $result->fetch_assoc()["ChocolateMilk"];
+
+        $sql = "SELECT * FROM Drinks";
+        $result = $conn->query($sql); 
+        $tea = $result->fetch_assoc()["Coffee"];
+
     ?>
+
+<body>
+	<div>
+		<button type="button" id="makeCoffee" class="button">Make Coffee</button>
+		<button type="button" id="makeChocolateMilk" class="button">Make Chocolate Milk</button>
+		<button type="button" id="makeTea" class="button">Make Tea</button>
+	</div>
+    <div>
+        <label type="label" id="coffeeCount"><?php echo $coffee?></label>
+        <label type="label" id="chocolateCount"><?php echo $choccymilk?></label>
+        <label type="label" id="teaCount"><?php echo $tea?></label>
+    </div>
+	<!--<div class="add-message">
+        <input type="text" id="tbAddMessage" placeholder="Message here"/>
+        <button type="button" id="btnAddMessage">Publish</button>
+    </div>-->
 
     <p id="messages" class="messages"></p>
 
@@ -62,9 +63,9 @@
         var tempmessage = "";
         var chart;
 
-        var tea = 0;
-        var chocolateMilk = 0;
-        var coffee= 0;
+        var tea = document.getElementById('teaCount').innerHTML;
+        var chocolateMilk = document.getElementById('chocolateCount').innerHTML;
+        var coffee= document.getElementById('coffeeCount').innerHTML;
         var total = 0;
 
         var connection = true;
@@ -138,7 +139,7 @@
                 // Send the message
                 client.send(message);
 
-                coffee += 1;
+                document.getElementById('coffeeCount').innerHTML = parseInt(document.getElementById('coffeeCount').innerHTML) + 1;
 
                 UpdateBarGraph();
             });
@@ -150,7 +151,7 @@
                 // Send the message
                 client.send(message);
 
-                chocolateMilk += 1;
+                document.getElementById('chocolateCount').innerHTML = parseInt(document.getElementById('chocolateCount').innerHTML) + 1;
 
                 UpdateBarGraph();
             });
@@ -162,7 +163,7 @@
                 // Send the message
                 client.send(message);
 
-                tea += 1;
+                document.getElementById('teaCount').innerHTML = parseInt(document.getElementById('teaCount').innerHTML) + 1;
 
                 UpdateBarGraph();
             });
@@ -218,11 +219,12 @@
         {
             if (connection)
             {
-                total = tea + coffee + chocolateMilk;
+                total = parseInt(document.getElementById('coffeeCount').innerHTML) + parseInt(document.getElementById('chocolateCount').innerHTML) + parseInt(document.getElementById('teaCount').innerHTML);
+                //window.alert(tea);
 
-                chart.options.data[0].dataPoints[0].y = coffee;
-                chart.options.data[0].dataPoints[1].y = chocolateMilk;
-                chart.options.data[0].dataPoints[2].y = tea;
+                chart.options.data[0].dataPoints[0].y = parseInt(document.getElementById('coffeeCount').innerHTML);
+                chart.options.data[0].dataPoints[1].y = parseInt(document.getElementById('chocolateCount').innerHTML);
+                chart.options.data[0].dataPoints[2].y = parseInt(document.getElementById('teaCount').innerHTML);
                 chart.options.data[0].dataPoints[3].y = total;
 
                 //$sql = "INSERT INTO Drinks (Coffee, ChocolateMilk, Tea) VALUES ('$coffee', '$chocolateMilk', '$tea')";
@@ -233,6 +235,18 @@
 
     </script>
 
+    <?php
+        $sql = "UPDATE Drinks SET Coffee = Coffee + " . 1;
+        $result = $conn->query($sql);
+
+        $sql = "UPDATE Drinks SET ChocolateMilk = ChocolateMilk + " . 1;
+        $result = $conn->query($sql);
+
+        $sql = "UPDATE Drinks SET Tea = Tea + " . 1;
+        echo $sql;
+        $result = $conn->query($sql);     
+        $conn->close();   
+        ?>
 
 </body>
 </html>
