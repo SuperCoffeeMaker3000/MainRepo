@@ -6,6 +6,7 @@ class WaterModule : public Module
   public:
     WaterModule(string ModuleID);
     int GetHeaterStatus();
+    double GetPumpSpeed();
 
   private:
     void PumpWaterIntoBoiler();
