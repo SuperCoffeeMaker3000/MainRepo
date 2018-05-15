@@ -58,6 +58,8 @@ int ControllerModule::SendUpdatesToUI(int option, uint8_t target, uint8_t messag
 		byteToSend[1] = message;
 		byteToSend[2] = error;
 
+		com.SendCommand(byteToSend);
+
 		// send here
 		break;
 
@@ -67,6 +69,8 @@ int ControllerModule::SendUpdatesToUI(int option, uint8_t target, uint8_t messag
 		byteToSend[1] = message;
 		byteToSend[2] = availableModules;
 
+		com.SendCommand(byteToSend);
+
 		// send here
 		break;
 
@@ -74,6 +78,25 @@ int ControllerModule::SendUpdatesToUI(int option, uint8_t target, uint8_t messag
 		// nothing to do here
 		break;
 	}
+
+	return 0;
+}
+
+int SendUpdatesToController(uint8_t target, uint8_t typeDrank, uint8_t volumeDrink, uint8_t strengthDrink, uint8_t amountSugar, uint8_t amountMelk){
+
+	byteToSend[0] = target;
+	byteToSend[1] = typeDrank;
+	byteToSend[2] = volumeDrink;
+	byteToSend[3] = strengthDrink;
+	byteToSend[4] = amountSugar;
+	byteToSend[5] = amountMelk;
+
+	return 0;
+}
+
+int SendUpdatesToModules(uint8_t target, uint8_t amount){
+
+	byteToSend[0] = target;
 
 	return 0;
 }
