@@ -1,9 +1,7 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
-//#include "iSensor.h"
-
-class Sensor //: //public iSensor
+class Sensor
 {
 public:
 	Sensor();
