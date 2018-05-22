@@ -4,10 +4,12 @@
 class UI
 {
 public:
-	UI();
-	~UI();
-	void ShowOnScreen();
-	void SendInstruction();
+    UI();
+    ~UI();
+    void SendInstruction();
+    void ShowOnScreen();
+    void ClearScreen();
+    
 };
 
 #endif
