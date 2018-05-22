@@ -235,5 +235,19 @@
 
     </script>
 
+    <?php
+        $sql = "UPDATE Drinks SET Coffee = Coffee + " . ?><script>parseInt(document.getElementById('coffeeCount').innerHTML);</script>;
+        <?php
+        $result = $conn->query($sql);
+
+        $sql = "UPDATE Drinks SET ChocolateMilk = ChocolateMilk + " .  + 1;
+        $result = $conn->query($sql);
+
+        $sql = "UPDATE Drinks SET Tea = Tea + " . + 1;
+        echo $sql;
+        $result = $conn->query($sql);     
+        $conn->close();   
+        ?>
+
 </body>
 </html>
