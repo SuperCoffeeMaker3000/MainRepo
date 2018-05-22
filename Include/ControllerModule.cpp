@@ -1,7 +1,20 @@
 #include "ControllerModule.h"
 #include "Communicator.h"
 
-
+enum states
+{
+	idle,
+	makingBeverage,
+	askingForMilkAndSugar,
+	pouringPowders,
+	heating,
+	pouringWater
+};
+enum superStates
+{
+	running,
+	error
+};
 
 ControllerModule::ControllerModule()
 {
@@ -34,6 +47,43 @@ int ControllerModule::BroadCast()
 
 	return 0;
 }
+
+
+
+int runMachine()
+{
+	switch(states)
+		case idle:
+			//add if command on button pressed here
+
+		break;
+
+		case makingBeverage:
+
+			//add code to loop through the making beverage process
+
+		break;
+
+		case askingForMilkAndSugar:
+			//add code to show choices on UI
+
+		break;
+
+		case pouringPowders:
+			//add code to pour powders
+		break;
+
+		case heating:
+			//add code to control the boiler
+		break;
+
+		case pouringWater:
+			//add code to deploy water in cup
+
+		break;
+
+}
+
 
 
 int ControllerModule::SendUpdatesToUI(int option, uint8_t target, uint8_t message, uint8_t module, uint8_t status, uint8_t error, uint8_t availableModules)
