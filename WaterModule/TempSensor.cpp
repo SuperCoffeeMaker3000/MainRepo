@@ -1,7 +1,7 @@
 #include "TempSensor.h" 
 #include "Arduino.h"
  
-int Tempsensor::GetData()
+int TempSensor::GetData()
 { 
     double sensorvalue = analogRead(SensorPin);
  
