@@ -235,18 +235,5 @@
 
     </script>
 
-    <?php
-        $sql = "UPDATE Drinks SET Coffee = Coffee + " .  + $("#coffeeCount").text();
-        $result = $conn->query($sql);
-
-        $sql = "UPDATE Drinks SET ChocolateMilk = ChocolateMilk + " .  + $("#chocolateCount").text();
-        $result = $conn->query($sql);
-
-        $sql = "UPDATE Drinks SET Tea = Tea + " .  $("#teaCount").text();
-        echo $sql;
-        $result = $conn->query($sql);     
-        $conn->close();   
-        ?>
-
 </body>
 </html>
