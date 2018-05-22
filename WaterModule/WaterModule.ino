@@ -1,3 +1,5 @@
+#include <TempSensor.h>
+#include <WaterModule.h>
 Tempsensor tempsensor;
 
 void setup() {
