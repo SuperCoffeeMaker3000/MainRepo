@@ -1,6 +1,4 @@
-#include <TempSensor.h>
-#include <WaterModule.h>
-Tempsensor tempsensor;
+TempSensor tempsensor;
 
 void setup() {
   // put your setup code here, to run once:
@@ -8,6 +6,6 @@ void setup() {
 }
 
 void loop() {
-  Serial.println(tempsensor.GetData());
+  //Serial.println(tempsensor.GetData());
   delay(100);
 }
