@@ -1,6 +1,8 @@
 #ifndef WATERMODULE
 #define WATERMODULE
 
+#include "Module.h"
+
 class WaterModule : public Module
 {
   public:
