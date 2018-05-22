@@ -5,69 +5,80 @@
 #define mediumCupVolume 200
 #define bigCupVolume 300
 
-WaterModule::WaterModule(String ModuleID)
-    : Module(String ModuleID)
+WaterModule::WaterModule()
 {
-    tempSensor = TempSensor();
+  //moduleID = ModuleID;
+  tempSensor = TempSensor();
 }
 
 void WaterModule::PumpWaterIntoBoiler()
 {
-    digitalWrite(pumpPin, HIGH);
-    //timing
-    //todo: how long does it take to fill the boiler if it is empty?
-    digitalWrite(pumpPin, LOW);
+  digitalWrite(PumpRelayPin, HIGH);
+  //timing
+  //todo: how long does it take to fill the boiler if it is empty?
+  digitalWrite(PumpRelayPin, LOW);
 }
 
 int WaterModule::PumpWaterIntoCup(int cupSize)
 {
-    switch (cupSize)
-    {
+  digitalWrite(PumpRelayPin, HIGH);
+  switch (cupSize)
+  {
     case 1:
-        digitalWrite(pumpPin, HIGH);
-        //timing for small cup = 100 ml
-        delay(smallCupVolume * GetPumpSpeed());
-        digitalWrite(pumpPin, LOW);
-        break;
+      //timing for small cup = 100 ml
+      delay(smallCupVolume * GetPumpSpeed());
+      break;
 
     case 2:
-        digitalWrite(pumpPin, HIGH);
-        //timing for medium cup
-        delay(mediumCupVolume * GetPumpSpeed());
-        digitalWrite(pumpPin, LOW);
-        break;
+      //timing for medium cup
+      delay(mediumCupVolume * GetPumpSpeed());
+      break;
 
     case 3:
-        digitalWrite(pumpPin, HIGH);
-        //timing for big cup
-        delay(bigCupVolume * GetPumpSpeed());
-        digitalWrite(pumpPin, LOW);
-        break;
-    case default:
-        //error parameter
-        return -1;
-    }
-    return 1;
+      //timing for big cup
+      delay(bigCupVolume * GetPumpSpeed());
+      break;
+    default:
+      //error parameter
+      return -1;
+  }
+  digitalWrite(PumpRelayPin, LOW);
+  return 1;
 }
 
-int WaterModule::ActivateHeater()
+int WaterModule::ActivateHeater(int PWMvalue)
 {
-    //use pwm to set the heater on
+  if (PWMvalue < 0 || PWMvalue > 255)
+  {
+    return -1;
+  }
+  //on error return -1;
 
-    //on succes return 0;
+  digitalWrite(BoilerRelayPin, HIGH);
+  //use pwm to set the heater on
+  analogWrite(BoilerPulsePin, PWMvalue);
+  //on succes return 0;
+  return 0;
 
-    //on error return -1;
 }
 
 int WaterModule::DeactivateHeater()
 {
-    digitalWrite(boilerPin, 0);
-    return 0;
+  digitalWrite(BoilerRelayPin, LOW);
+  digitalWrite(BoilerPulsePin, 0);
+  return 0;
 }
 
 double WaterModule::GetPumpSpeed()
 {
-    //pump speed was 100ml in 22.5 seconds.
-    //=4,444 ml/sec
-    return 100/22.5;
+  //pump speed was 100ml in 22.5 seconds.
+  //=4,444 ml/sec
+  return 100 / 22.5;
 }
+
+int WaterModule::GetHeaterStatus()
+{
+  return tempSensor.GetData();
+}
+
+

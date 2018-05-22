@@ -4,8 +4,8 @@
 class iSensor
 {
 public:
-	~iSensor();
-	int GetData();
+	virtual ~iSensor();
+	virtual int GetData() = 0;
 };
 
 #endif

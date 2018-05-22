@@ -1,11 +1,13 @@
-TempSensor tempsensor;
+#include "WaterModule.h"
+WaterModule watermodule;
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(9600);
+  String moduleID = "123";
+  WaterModule watermodule = WaterModule();
 }
 
 void loop() {
-  //Serial.println(tempsensor.GetData());
+  Serial.println(watermodule.GetHeaterStatus());
   delay(100);
 }

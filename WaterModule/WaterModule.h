@@ -1,24 +1,29 @@
 #ifndef WATERMODULE
 #define WATERMODULE
 
-#include "Module.h"
+#include "TempSensor.h"
+#include "Arduino.h"
 
-class WaterModule : public Module
+class WaterModule
 {
   public:
-    WaterModule(String ModuleID);
+    WaterModule();
     int GetHeaterStatus();
     double GetPumpSpeed();
 
   private:
     void PumpWaterIntoBoiler();
     int PumpWaterIntoCup(int cupSize);
-    int ActivateHeater();
+    int ActivateHeater(int PWMvalue);
     int DeactivateHeater();
+    
+    String moduleID;
 
     TempSensor tempSensor;
     //digital
-    int boilerPin = 3;
-    int pumpPin = 4;
+    const int BoilerRelayPin = 9;
+    const int PumpRelayPin = 8;
+    const int BoilerPulsePin = 3;
+    const int BoilerTempSensorPin = A0;
 };
 #endif
