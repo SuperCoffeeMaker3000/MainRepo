@@ -18,15 +18,19 @@ enum superStates
 
 ControllerModule::ControllerModule()
 {
-	SugarModule = 	new Communicator(AddressSugarModule);
+	SugarModule  = 	new Communicator(AddressSugarModule);
 	CoffeePowder =	new Communicator(AddressCoffeePowder);
-	ChocoPowder = 	new Communicator(AddressChocoPowder);
-	WaterModule = 	new Communicator(AddressWaterModule);
+	ChocoPowder  = 	new Communicator(AddressChocoPowder);
+	WaterModule  = 	new Communicator(AddressWaterModule);
+	UiModule 	 =  new Communicator(AddressUiModule);
+	MilkPowder 	 =	new Communicator(AddressMilkPowder);
 	
-	AddressSugarModule	= 0x7df;
-	AddressCoffeePowder	= 0x7de;
-	AddressChocoPowder	= 0x7dd;
-	AddressWaterModule	= 0x7dc;
+	uint8_t AddressSugarModule	= 0x16;
+	uint8_t AddressCoffeePowder	= 0x15;
+	AddressChocoPowder	= 0x19;
+	AddressMilkPowder 	= 0x17;
+	AddressWaterModule	= 0x14;
+	AddressUiModule 	= 0x0B;
 }
 
 ControllerModule::~ControllerModule()
@@ -48,7 +52,10 @@ int ControllerModule::BroadCast()
 	return 0;
 }
 
+int dispense(unsigned long id, uint8_t volume)
+{
 
+}
 
 int runMachine()
 {
@@ -56,10 +63,15 @@ int runMachine()
 		case idle:
 			//add if command on button pressed here
 
+			while(UiModule->ReceiveMessage(, AddressUiModule))
+			states = makingBeverage;
+
 		break;
 
 		case makingBeverage:
-
+			
+			dispense(AddressWaterModule, 1);
+			
 			//add code to loop through the making beverage process
 
 		break;
