@@ -92,4 +92,9 @@ Communicator* WaterModule::GetCommunicator()
 
 void WaterModule::ProcessMessage()
 {
+  if (communicator->ReceiveMessage(20, 10))
+  {
+    int volume = communicator->msg.data[1];
+    PumpWaterIntoCup(volume);
+  }
 }

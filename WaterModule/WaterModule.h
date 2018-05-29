@@ -17,10 +17,10 @@ class WaterModule
     int ActivateHeater(int PWMvalue);
     int DeactivateHeater();
     Communicator* GetCommunicator();
-
     void ProcessMessage();
+
   private:
-     moduleID;
+    unsigned long moduleID;
     Communicator* communicator;
     TempSensor* tempSensor;
     //digital
