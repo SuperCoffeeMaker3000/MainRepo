@@ -5,6 +5,8 @@ Communicator::Communicator(unsigned long adrsValue)
 	//setting Serial, SPI and Can defaults plus Can address
 	Serial.begin(9600);
 	SPI.setClockDivider(SPI_CLOCK_DIV8);
+	can.initCAN(CAN_BAUD_100K);
+	can.setCANNormalMode(LOW) == 0;
     msg.isExtendedAdrs = false;
 	msg.rtr = false;
 	msg.dataLength = 8;
@@ -62,13 +64,14 @@ void Communicator::SendCommand(uint8_t byteOne, uint8_t byteTwo)
 	
 	return;
 }
-bool Communicator::ReceiveMessage(int firstByte, int canId)
+bool Communicator::ReceiveMessage(int firstByte,unsigned long canId)
 {
 	int i = can.receiveCANMessage(&msg, 1000);
 	if(i && (msg.data[0] == firstByte) && msg.adrsValue == canId)
 	{
 		return true;
 	}
+	
 	return false;
 }
 
