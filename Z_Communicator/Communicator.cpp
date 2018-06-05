@@ -16,6 +16,10 @@ Communicator::~Communicator()
 
 }
 
+uint8_t Communicator::GetDataByte(uint8_t selectedByte){
+	return msg.data[selectedByte];
+}
+
 void Communicator::SendCommand(uint8_t byteOne, uint8_t byteTwo, uint8_t byteThree, uint8_t byteFour, uint8_t byteFive)
 {
 	msg.data[0] = byteOne;  

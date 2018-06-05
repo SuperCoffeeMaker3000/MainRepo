@@ -1,14 +1,17 @@
 #include "ControllerModule.h"
 #include "Communicator.h"
 
+enum subStates
+{
+	pouringPowders,
+	heating,
+	finished
+}
+
 enum states
 {
 	idle,
-	makingBeverage,
-	askingForMilkAndSugar,
-	pouringPowders,
-	heating,
-	pouringWater
+	makingBeverage
 };
 enum superStates
 {
@@ -60,39 +63,82 @@ int dispense(unsigned long id, uint8_t volume)
 int runMachine()
 {
 	switch(states)
+	{
+
+
 		case idle:
 			//add if command on button pressed here
 
-			while(UiModule->ReceiveMessage(, AddressUiModule))
-			states = makingBeverage;
+			
+
+			while(UiModule->ReceiveMessage(0x0A, AddressUiModule) == true)
+			{
+
+				tempByte = UiModule->GetDataByte(1); 
+				volumeByte = UiModule->GetDataByte(2);
+				
+				if(tempByte == 0x00)
+				{
+					states = makingBeverage;
+					subStates = pouringPowders;
+				}else
+				{
+					states = makingBeverage;
+					subStates = heating;
+				}
+
+			}
 
 		break;
 
 		case makingBeverage:
-			
-			dispense(AddressWaterModule, 1);
+
+			switch(subStates)
+			{
+				case heating:
+				//add code to control the boiler
+				WaterModule->SendCommand(AddressWaterModule, volumeByte);
+
+				while(WaterModule->ReceiveMessage(0x0A, AddressWaterModule) == true)
+				{
+					statusByte = WaterModule->GetDataByte[2];
+					if(statusByte == 0x02){
+						subStates = finished;
+					}
+				}
+
+
+
+				break;
+
+				case finished:
+					//add code to deploy water in cup
+					UiModule->SendCommand(AddressUiModule, 0x00, 0x0A, 0x02);
+
+					states = idle;
+
+				break;
+
+				case pouringPowders:
+					//add code to pour powders
+					while(UiModule->ReceiveMessage(0x0A, AddressUiModule) == false)
+					{						
+
+						tempByte = UiModule->GetDataByte(1); 
+						
+
+					}
+			break;
+
 			
 			//add code to loop through the making beverage process
 
+			}
+
+			
 		break;
-
-		case askingForMilkAndSugar:
-			//add code to show choices on UI
-
-		break;
-
-		case pouringPowders:
-			//add code to pour powders
-		break;
-
-		case heating:
-			//add code to control the boiler
-		break;
-
-		case pouringWater:
-			//add code to deploy water in cup
-
-		break;
+	}
+		
 
 }
 
