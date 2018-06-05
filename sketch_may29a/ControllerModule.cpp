@@ -42,7 +42,7 @@ ControllerModule::ControllerModule()
 	ChocoPowder  = 	new Communicator(AddressChocoPowder);
 	WaterModule  = 	new Communicator(AddressWaterModule);
  */
-	UiModule 	 =  new Communicator(AddressUiModule);
+	UiModule 	 =  new Communicator(50);
   
 	//MilkPowder 	 =	new Communicator(AddressMilkPowder);
 
@@ -57,12 +57,16 @@ void ControllerModule::test()
 {
         while(true){
         Serial.println("hallo");
-        if(UiModule->ReceiveMessage(1, 1))
-        {
-          Serial.println("fix");
-        }
+        //UiModule->SendCommand(10, 10);
         
-        delay(10);
+        
+        if(UiModule->ReceiveMessage(50,50))
+        {
+          Serial.println("swag");  
+        }
+        Serial.println(UiModule->msg.data[1]);
+        
+        delay(100);
       }
 }
 
@@ -91,19 +95,19 @@ int ControllerModule::RunMachine()
 		case idle:
 			//add if command on button pressed here
 
-			
+			/*
       Serial.println("hallo");
       while(true){
         Serial.println("hallo");
         UiModule->ReceiveMessage(1, 0x7df);
         Serial.println(UiModule->msg.data[0]);
         delay(200);
-      }
-			  /*while(UiModule->ReceiveMessage(0x0A, AddressUiModule) == true)
+      }*/
+		while(UiModule->ReceiveMessage(0x0A, AddressUiModule) == true)
 			{
 
     
-        Serial.println("it's je boy");
+                Serial.println("it's je boy");
 				tempByte = 		UiModule->msg.data[1]; 
 				volumeByte = 	UiModule->msg.data[2];
 
@@ -118,7 +122,7 @@ int ControllerModule::RunMachine()
 					subState = heating;
 				}
         
-			}*/
+			}
 
 		break;
 
