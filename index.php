@@ -39,9 +39,9 @@
 		<button type="button" id="makeTea" class="button">Make Tea</button>
 	</div>
     <div>
-        <label type="label" id="coffeeCount"><?php echo $coffee?></label>
-        <label type="label" id="chocolateCount"><?php echo $choccymilk?></label>
-        <label type="label" id="teaCount"><?php echo $tea?></label>
+        <label type="hidden" id="coffeeCount"><?php echo $coffee?></label>
+        <label type="hidden" id="chocolateCount"><?php echo $choccymilk?></label>
+        <label type="hidden" id="teaCount"><?php echo $tea?></label>
     </div>
 	<!--<div class="add-message">
         <input type="text" id="tbAddMessage" placeholder="Message here"/>
@@ -236,15 +236,13 @@
     </script>
 
     <?php
-        $sql = "UPDATE Drinks SET Coffee = Coffee + " . ?><script>parseInt(document.getElementById('coffeeCount').innerHTML);</script>;
-        <?php
+        $sql = "UPDATE Drinks SET Coffee = Coffee + " . "1";
         $result = $conn->query($sql);
 
-        $sql = "UPDATE Drinks SET ChocolateMilk = ChocolateMilk + " .  + 1;
+        $sql = "UPDATE Drinks SET ChocolateMilk = ChocolateMilk + " . "1";
         $result = $conn->query($sql);
 
-        $sql = "UPDATE Drinks SET Tea = Tea + " . + 1;
-        echo $sql;
+        $sql = "UPDATE Drinks SET Tea = Tea + " . "1";
         $result = $conn->query($sql);     
         $conn->close();   
         ?>
