@@ -14,14 +14,15 @@ void setup() {
 }
 
 void loop() {
+  watermodule.UpdatePID();
   switch (mode)
   {
     case 0:
-      watermodule.ProcessMessage();
+      //watermodule.ProcessMessage();
       mode = 1;
       break;
     case 1:
-      watermodule.GetCommunicator()->SendCommand(CONTROLLER, 0x03);
+      //watermodule.GetCommunicator()->SendCommand(CONTROLLER, 0x03);
       mode = 0;
       break;
     default:

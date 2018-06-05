@@ -6,7 +6,7 @@
 class TempSensor : public Sensor
 {
     public:
-        int GetData();
+        double GetData();
     private:
         //analog
         int SensorPin = 0;

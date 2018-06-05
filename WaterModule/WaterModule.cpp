@@ -1,4 +1,5 @@
 #include <Communicator.h>
+#include <PID_v1.h>
 #include "TempSensor.h"
 #include "WaterModule.h"
 #include "Arduino.h"
@@ -9,9 +10,23 @@
 
 WaterModule::WaterModule()
 {
+  //settings for the PID controller
+  Setpoint = 70;
+  Kp = 0.5;
+  Ki = 15;
+  Kd = 0;
+  PIDController = new PID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
+  PIDController->SetMode(AUTOMATIC);
+  //address for the canbus
   unsigned long address = 20;
+  //canbus communicator
   communicator = new Communicator(address);
+  //sensor for water temperature
   tempSensor = new TempSensor();
+  //first input for the PID controller
+  Input = tempSensor->GetData();
+  //debug for pid printing, true means printing
+  debug = true;
 }
 
 void WaterModule::PumpWaterIntoBoiler()
@@ -51,7 +66,7 @@ int WaterModule::PumpWaterIntoCup(int cupSize)
   return 1;
 }
 
-int WaterModule::ActivateHeater(int PWMvalue)
+int WaterModule::ActivateHeater(double PWMvalue)
 {
   if (PWMvalue < 0 || PWMvalue > 255)
   {
@@ -98,3 +113,22 @@ void WaterModule::ProcessMessage()
     PumpWaterIntoCup(volume);
   }
 }
+
+PID* WaterModule::GetPID()
+{
+  return PIDController;
+}
+
+void WaterModule::UpdatePID()
+{
+  Input = tempSensor->GetData();
+  PIDController->Compute();
+  ActivateHeater(Output);
+  if (debug)
+  {
+    Serial.print(Input);
+    Serial.print(" ");
+    Serial.println(Output);
+  }
+}
+
