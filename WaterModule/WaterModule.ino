@@ -1,20 +1,18 @@
-#include "Communicator.h"
+#include <Communicator.h>
 #include "WaterModule.h"
 
-#define CONTROLLER 10
-#define WATERMODULE 20
-
-WaterModule watermodule;
+WaterModule* watermodule;
 //0 is receive, 1 is transmit
 int mode = 0;
 
 void setup() {
   Serial.begin(9600);
-  WaterModule watermodule = WaterModule();
+  Serial.println("test");
+  watermodule = new WaterModule();
 }
 
 void loop() {
-  watermodule.UpdatePID();
+  watermodule->UpdatePID();
   switch (mode)
   {
     case 0:

@@ -10,11 +10,13 @@
 
 WaterModule::WaterModule()
 {
-  //settings for the PID controller
-  Setpoint = 70;
+  //settings for the PiD controller
+  Setpoint = 80;
+  //setting that work properly (within overshoot spec) are: kp 0.5 ki 15 kd 2
+  //setting that work better (more stable) are: kp 0.5 ki 3 kd 5
   Kp = 0.5;
-  Ki = 15;
-  Kd = 0;
+  Ki = 3;
+  Kd = 5;
   PIDController = new PID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
   PIDController->SetMode(AUTOMATIC);
   //address for the canbus
@@ -27,6 +29,7 @@ WaterModule::WaterModule()
   Input = tempSensor->GetData();
   //debug for pid printing, true means printing
   debug = true;
+  waterTempReached = false;
 }
 
 void WaterModule::PumpWaterIntoBoiler()
@@ -39,8 +42,11 @@ void WaterModule::PumpWaterIntoBoiler()
 
 int WaterModule::PumpWaterIntoCup(int cupSize)
 {
+  if (!waterTempReached)
+  {
+    return -1;
+  }
   digitalWrite(PumpRelayPin, HIGH);
-  Serial.println("lol");
   switch (cupSize)
   {
     case 1:
@@ -55,7 +61,6 @@ int WaterModule::PumpWaterIntoCup(int cupSize)
 
     case 3:
       //timing for big cup
-      Serial.println(bigCupVolume * GetPumpSpeed());
       delay(bigCupVolume / GetPumpSpeed() * 1000);
       break;
     default:
@@ -112,6 +117,11 @@ void WaterModule::ProcessMessage()
     int volume = communicator->msg.data[1];
     PumpWaterIntoCup(volume);
   }
+}
+
+bool WaterModule::UpdateWaterTempReached()
+{
+  if(
 }
 
 PID* WaterModule::GetPID()
