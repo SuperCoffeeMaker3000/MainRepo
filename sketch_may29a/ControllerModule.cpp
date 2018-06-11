@@ -67,7 +67,7 @@ ControllerModule::~ControllerModule()
 
 int ControllerModule::GiveInstruction()
 {
-
+  //to do
   return 0;
 }
 
@@ -85,22 +85,19 @@ int ControllerModule::RunMachine()
     case idle:
       {
         Serial.println("RunMachine::idle");
-        //add if command on button pressed here
         Serial.println("Receiving the can message");
         int i = can.receiveCANMessage(&msg, 1000);
-        Serial.println("Received message");
-        //test case
-        i = 1;
-        msg.adrsValue = AddressUiModule;
-        msg.data[0] = Address;
-        msg.data[1] = 0;
-        msg.data[2] = 0;
-        msg.data[3] = 0;
-        msg.data[4] = 2;
-        msg.data[5] = 2;
-        //end test case
         if (i && msg.adrsValue == AddressUiModule && msg.data[0] == Address)
         {
+          Serial.println("Received message");
+          Serial.println("The message was ");
+          Serial.println(msg.adrsValue);
+          Serial.println(msg.data[0]);
+          Serial.println(msg.data[1]);
+          Serial.println(msg.data[2]);
+          Serial.println(msg.data[3]);
+          Serial.println(msg.data[4]);
+          Serial.println(msg.data[5]);
           Serial.println("Setting message for further instructions");
           /*
              koffie = 0x00
@@ -108,11 +105,11 @@ int ControllerModule::RunMachine()
              choco = 0x02
              soep = 0x03
           */
-          typeDrankByte = msg.data[1];
-          volumeByte = msg.data[2];
-          sterkteByte = msg.data[3];
+          typeDrankByte     = msg.data[1];
+          volumeByte        = msg.data[2];
+          sterkteByte       = msg.data[3];
           sterkteSuikerByte = msg.data[4];
-          sterkteMelkByte = msg.data[5];
+          sterkteMelkByte   = msg.data[5];
           Serial.print("typeDrankByte = ");
           Serial.println(typeDrankByte);
           switch (typeDrankByte)
@@ -151,6 +148,7 @@ int ControllerModule::RunMachine()
               }
           }
         }
+        break;
       }
     case makingBeverage:
       {
@@ -168,12 +166,29 @@ int ControllerModule::RunMachine()
               msg.data[1] = volumeByte;
               can.transmitCANMessage(msg, 1000);
               delay(100);
+              //receiving the ack
+              Serial.println("Waiting for ACK");
+              bool receivedAck = false;
+              while (!receivedAck)
+              {
+                int i = can.receiveCANMessage(&msg, 1000);
+                if (i && msg.adrsValue == AddressWaterModule && msg.data[0] == Address)
+                {
+                  if (msg.data[1] == 3 && msg.data[2] == 2)
+                  {
+                    receivedAck = true;
+                    Serial.println("Received ACK");
+                  }
+                }
+              }
+              subState = finished;
               break;
             }
           case finished:
             {
               //add code to deploy water in cup
               state = idle;
+              while (1);
               break;
             }
           case pouringPowders:
@@ -195,7 +210,7 @@ int ControllerModule::RunMachine()
                   Serial.println(msg.adrsValue);
                   Serial.println(msg.data[0]);
                   Serial.println(msg.data[1]);
-                  Serial.println("RunMachine::substate = pouringPowders, message sent");
+                  Serial.println("RunMachine::substate = pouringPowders sugar, message sent");
                   delay(100);
                   //receiving the ack
                   Serial.println("Waiting for ACK");
@@ -226,7 +241,7 @@ int ControllerModule::RunMachine()
                   Serial.println(msg.data[0]);
                   Serial.println(msg.data[1]);
                   delay(100);
-                  Serial.println("RunMachine::substate = pouringPowders, message sent");
+                  Serial.println("RunMachine::substate = pouringPowders milk, message sent");
                   //receiving the ack
                   Serial.println("Waiting for ACK");
                   bool receivedAck = false;
@@ -255,7 +270,7 @@ int ControllerModule::RunMachine()
                 Serial.println(msg.data[0]);
                 Serial.println(msg.data[1]);
                 delay(100);
-                Serial.println("RunMachine::substate = pouringPowders, message sent");
+                Serial.println("RunMachine::substate = pouringPowders coffee, message sent");
                 //receiving the ack
                 Serial.println("Waiting for ACK");
                 bool receivedAck = false;
@@ -272,8 +287,8 @@ int ControllerModule::RunMachine()
                     }
                   }
                 }
+                subState = pouringWater;
               }
-
               //choco
               else if (typeDrankByte == 0x02)
               {
@@ -287,7 +302,7 @@ int ControllerModule::RunMachine()
               break;
             }
         }
-        subState = pouringWater;
+        break;
       }
       break;
   }
