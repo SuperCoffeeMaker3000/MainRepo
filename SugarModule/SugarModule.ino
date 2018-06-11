@@ -5,8 +5,6 @@ SugarModule* sugarModule;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  Serial.println("CARRIED BY THIJS");
-    Serial.println("IT'S A THIJS THING");
   sugarModule = new SugarModule();
 }
 
