@@ -1,7 +1,7 @@
 #ifndef WATERMODULE
 #define WATERMODULE
 
-#include <Communicator.h>
+#include <MCP2515.h>
 #include <PID_v1.h>
 #include "TempSensor.h"
 #include "Arduino.h"
@@ -10,7 +10,7 @@ class WaterModule
 {
   public:
     //const
-    WaterModule();
+    WaterModule(int setpoint);
     //controller
     PID* GetPID();
     void UpdatePID();
@@ -23,8 +23,8 @@ class WaterModule
     //heater
     int ActivateHeater(double temperature);
     int DeactivateHeater();
+    void UpdateWaterTempReached();
     //canbus
-    Communicator* GetCommunicator();
     void ProcessMessage();
 
   private:
@@ -32,9 +32,11 @@ class WaterModule
     PID* PIDController;
     double Setpoint, Input, Output;
     double Kp = .5, Ki = 15, Kd = 0;
+    bool waterTempReached;
     //canbus
+    CANMSG msg;
+    MCP2515 can;
     unsigned long moduleID;
-    Communicator* communicator;
     //sensor
     TempSensor* tempSensor;
     //digital

@@ -1,4 +1,5 @@
-#include <Communicator.h>
+#include <SPI.h>
+#include <MCP2515.h>
 #include <PID_v1.h>
 #include "TempSensor.h"
 #include "WaterModule.h"
@@ -8,10 +9,12 @@
 #define mediumCupVolume 200
 #define bigCupVolume 300
 
-WaterModule::WaterModule()
+#define controllerAddress 10
+
+WaterModule::WaterModule(int setpoint)
 {
   //settings for the PiD controller
-  Setpoint = 80;
+  Setpoint = setpoint;
   //setting that work properly (within overshoot spec) are: kp 0.5 ki 15 kd 2
   //setting that work better (more stable) are: kp 0.5 ki 3 kd 5
   Kp = 0.5;
@@ -20,9 +23,7 @@ WaterModule::WaterModule()
   PIDController = new PID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
   PIDController->SetMode(AUTOMATIC);
   //address for the canbus
-  unsigned long address = 20;
-  //canbus communicator
-  communicator = new Communicator(address);
+  moduleID = 20;
   //sensor for water temperature
   tempSensor = new TempSensor();
   //first input for the PID controller
@@ -30,6 +31,19 @@ WaterModule::WaterModule()
   //debug for pid printing, true means printing
   debug = true;
   waterTempReached = false;
+  //canbus
+  SPI.setClockDivider(SPI_CLOCK_DIV8);
+
+  if (can.initCAN(CAN_BAUD_100K) == 0)
+  {
+    Serial.println("initCAN() failed");
+    while (1);
+  }
+  if (can.setCANNormalMode(LOW) == 0) //normal mode non single shot
+  {
+    Serial.println("setCANNormalMode() failed");
+    while (1);
+  }
 }
 
 void WaterModule::PumpWaterIntoBoiler()
@@ -105,23 +119,36 @@ int WaterModule::GetHeaterStatus()
   return tempSensor->GetData();
 }
 
-Communicator* WaterModule::GetCommunicator()
-{
-  return communicator;
-}
-
 void WaterModule::ProcessMessage()
 {
-  if (communicator->ReceiveMessage(20, 10))
+  int i = can.receiveCANMessage(&msg, 1000);
+  if (i && msg.adrsValue == controllerAddress && (msg.data[0] == moduleID))
   {
-    int volume = communicator->msg.data[1];
+    int volume = msg.data[1];
     PumpWaterIntoCup(volume);
   }
 }
 
-bool WaterModule::UpdateWaterTempReached()
+void WaterModule::UpdateWaterTempReached()
 {
-  if(
+  int temp = GetHeaterStatus();
+  if (temp >= 80)
+  {
+    waterTempReached = true;
+    msg.adrsValue = moduleID;
+    msg.isExtendedAdrs = false;
+    msg.rtr = false;
+    msg.dataLength = 8;
+    msg.data[0] = 0x02;
+    msg.data[1] = 0x01;
+    msg.data[2] = 123;
+    msg.data[3] = 0;
+    msg.data[4] = 0;
+    msg.data[5] = 0;
+    msg.data[6] = 0;
+    msg.data[7] = 0;
+    can.transmitCANMessage(msg, 1000);
+  }
 }
 
 PID* WaterModule::GetPID()
