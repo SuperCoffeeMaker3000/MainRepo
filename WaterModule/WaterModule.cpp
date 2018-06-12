@@ -44,6 +44,8 @@ WaterModule::WaterModule(int setpoint)
     Serial.println("setCANNormalMode() failed");
     while (1);
   }
+  Serial.println("Watermodule::CANBUS started");
+  Serial.println("Watermodule::Watermodule initalised");
 }
 
 void WaterModule::PumpWaterIntoBoiler()
@@ -56,6 +58,8 @@ void WaterModule::PumpWaterIntoBoiler()
 
 int WaterModule::PumpWaterIntoCup(int cupSize)
 {
+  Serial.print("WaterModule::PumpWaterIntoCup::Pumping::");
+  Serial.println(cupSize);
   if (!waterTempReached)
   {
     return -1;
@@ -82,6 +86,7 @@ int WaterModule::PumpWaterIntoCup(int cupSize)
       return -1;
   }
   digitalWrite(PumpRelayPin, LOW);
+  Serial.println("WaterModule::PumpWaterIntoCup::Pumping::Done");
   return 1;
 }
 
@@ -121,33 +126,49 @@ int WaterModule::GetHeaterStatus()
 
 void WaterModule::ProcessMessage()
 {
+  //the order of pouring water
+  Serial.println("WaterModule::ProcessMessage");
   int i = can.receiveCANMessage(&msg, 1000);
   if (i && msg.adrsValue == controllerAddress && (msg.data[0] == moduleID))
   {
     int volume = msg.data[1];
-    PumpWaterIntoCup(volume);
-  }
-}
-
-void WaterModule::UpdateWaterTempReached()
-{
-  int temp = GetHeaterStatus();
-  if (temp >= 80)
-  {
-    waterTempReached = true;
-    msg.adrsValue = moduleID;
+    if (waterTempReached)
+    {
+      Serial.println("WaterModule::ProcessMessage::WaterTempReached");
+      PumpWaterIntoCup(volume);
+    }
+    else
+    {
+      while (!waterTempReached)
+      {
+        Serial.println("WaterModule::ProcessMessage::WaterTempNOTReached");
+        delay(1000);
+        PumpWaterIntoCup(volume);
+      }
+    }
+    msg.adrsValue = 20;
     msg.isExtendedAdrs = false;
     msg.rtr = false;
     msg.dataLength = 8;
-    msg.data[0] = 0x02;
-    msg.data[1] = 0x01;
-    msg.data[2] = 123;
+    msg.data[0] = 10;
+    msg.data[1] = 3;
+    msg.data[2] = 2;
     msg.data[3] = 0;
     msg.data[4] = 0;
     msg.data[5] = 0;
     msg.data[6] = 0;
     msg.data[7] = 0;
     can.transmitCANMessage(msg, 1000);
+    delay(100);
+  }
+}
+
+void WaterModule::UpdateWaterTempReached()
+{
+  int temp = GetHeaterStatus();
+  if (temp >= Setpoint)
+  {
+    waterTempReached = true;
   }
 }
 

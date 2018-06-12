@@ -89,6 +89,7 @@ int ControllerModule::RunMachine()
         int i = can.receiveCANMessage(&msg, 1000);
         if (i && msg.adrsValue == AddressUiModule && msg.data[0] == Address)
         {
+
           Serial.println("Received message");
           Serial.println("The message was ");
           Serial.println(msg.adrsValue);
@@ -188,7 +189,7 @@ int ControllerModule::RunMachine()
             {
               //add code to deploy water in cup
               state = idle;
-              while (1);
+
               break;
             }
           case pouringPowders:

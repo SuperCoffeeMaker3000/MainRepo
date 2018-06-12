@@ -68,6 +68,28 @@ void loop()
 #else //MODE == 1
   //transmitter
 
+//  msg.adrsValue = 10;
+//  msg.isExtendedAdrs = false;
+//  msg.rtr = false;
+//  msg.dataLength = 8;
+//  msg.data[0] = 20;
+//  msg.data[1] = 1;
+//  msg.data[2] = 1;
+//  msg.data[3] = 1;
+//  msg.data[4] = 2;
+//  msg.data[5] = 2;
+//  msg.data[6] = 0;
+//  msg.data[7] = 0;
+//  can.transmitCANMessage(msg, 1000);
+//
+//  digitalWrite(led2, HIGH);
+//  digitalWrite(led3, LOW);
+//  delay(100);
+//  digitalWrite(led2, LOW);
+//  digitalWrite(led3, HIGH);
+//  Serial.println("data transmitted");
+//  delay(2000);
+
   msg.adrsValue = 11;
   msg.isExtendedAdrs = false;
   msg.rtr = false;
@@ -134,7 +156,29 @@ void loop()
   Serial.println("data transmitted");
   delay(2000);
 
-  msg.adrsValue = 20;
+//  msg.adrsValue = 20;
+//  msg.isExtendedAdrs = false;
+//  msg.rtr = false;
+//  msg.dataLength = 8;
+//  msg.data[0] = 10;
+//  msg.data[1] = 3;
+//  msg.data[2] = 2;
+//  msg.data[3] = 0;
+//  msg.data[4] = 0;
+//  msg.data[5] = 0;
+//  msg.data[6] = 0;
+//  msg.data[7] = 0;
+//  can.transmitCANMessage(msg, 1000);
+//
+//  digitalWrite(led2, HIGH);
+//  digitalWrite(led3, LOW);
+//  delay(100);
+//  digitalWrite(led2, LOW);
+//  digitalWrite(led3, HIGH);
+//  Serial.println("data transmitted");
+//  delay(2000);
+
+  msg.adrsValue = 22;
   msg.isExtendedAdrs = false;
   msg.rtr = false;
   msg.dataLength = 8;

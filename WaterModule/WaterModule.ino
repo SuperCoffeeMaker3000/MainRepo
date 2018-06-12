@@ -1,7 +1,7 @@
 #include  <MCP2515.h>
 #include  "WaterModule.h"
 
-#define setpoint 60
+#define setpoint 15
 
 WaterModule* watermodule;
 //0 is receive, 1 is transmit
